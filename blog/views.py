@@ -187,21 +187,21 @@ class PostDetailView(DetailView):
         # 视图必须返回一个 HttpResponse 对象
         return response
 
-    def get_object(self, queryset=None):
-        # 覆写 get_object 方法的目的是因为需要对 post 的 body 值进行渲染
-        post = super().get_object(queryset=None)
-        md = markdown.Markdown(extensions=[
-            'markdown.extensions.extra',
-            'markdown.extensions.codehilite',
-            # 记得在顶部引入 TocExtension 和 slugify
-            TocExtension(slugify=slugify),
-        ])
-        post.body = md.convert(post.body)
+    # def get_object(self, queryset=None):
+    #     # 覆写 get_object 方法的目的是因为需要对 post 的 body 值进行渲染
+    #     post = super().get_object(queryset=None)
+    #     md = markdown.Markdown(extensions=[
+    #         'markdown.extensions.extra',
+    #         'markdown.extensions.codehilite',
+    #         # 记得在顶部引入 TocExtension 和 slugify
+    #         TocExtension(slugify=slugify),
+    #     ])
+    #     post.body = md.convert(post.body)
 
-        m = re.search(r'<div class="toc">\s*<ul>(.*)</ul>\s*</div>', md.toc, re.S)
-        post.toc = m.group(1) if m is not None else ''
+    #     m = re.search(r'<div class="toc">\s*<ul>(.*)</ul>\s*</div>', md.toc, re.S)
+    #     post.toc = m.group(1) if m is not None else ''
 
-        return post
+    #     return post
     # PostDetailView 稍微复杂一点，主要是等价的 detail 视图函数本来就比较复杂，下面来一步步对照 detail 视图函数中的代码讲解。
     # 首先我们为 PostDetailView 类指定了一些属性的值，这些属性的含义和 ListView 中是一样的，这里不再重复讲解。
     # 紧接着我们覆写了 get 方法。这对应着 detail 视图函数中将 post 的阅读量 +1 的那部分代码。事实上，你可以简单地把 get 方法的调用看成是 detail 视图函数的调用。
