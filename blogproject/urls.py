@@ -15,11 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from blog.feeds import AllPostsRssFeed
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),
     path('', include('comments.urls')),
+    path('all/rss/', AllPostsRssFeed(), name='rss'),
+    path('search/', include('haystack.urls')),
 ]
 # 导入一个 include 函数，然后利用这个函数把 blog 应用下的 urls.py 文件包含了进来。
 # 此外 include 前还有一个 ''，这是一个空字符串。这里也可以写其它字符串，django 会把这个字符串和后面 include 的 urls.py 文件中的 URL 拼接。

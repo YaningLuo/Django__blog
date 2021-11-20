@@ -1,9 +1,13 @@
 import markdown
+import re
 from django.db import models
 from django.contrib.auth.models import User  # 下面author导入的User模块
 from django.utils import timezone  # 下面获取时间的模块
 from django.urls import reverse
 from django.utils.html import strip_tags
+from django.utils.text import slugify
+from markdown.extensions.toc import TocExtension
+from django.utils.functional import cached_property
 
 
 # pipenv run python manage.py makemigrations 和 pipenv run python manage.py migrate
@@ -12,6 +16,22 @@ from django.utils.html import strip_tags
 # django为我们提供了一套ORM(Object Relational Mapping)系统
 # 这样django就可以把这个类翻译成数据库的操作语言，在数据库里常见一个名为Category的表格
 # 代码翻译成数据库语言时其规则就是一个 Python 类对应一个数据库表格，类名即表名，类的属性对应着表格的列，属性名即列名
+
+
+def generate_rich_content(value):
+    md = markdown.Markdown(
+        extensions=[
+            "markdown.extensions.extra",
+            "markdown.extensions.codehilite",
+            # 记得在顶部引入 TocExtension 和 slugify
+            TocExtension(slugify=slugify),
+        ]
+    )
+    content = md.convert(value)
+    m = re.search(r'<div class="toc">\s*<ul>(.*)</ul>\s*</div>', md.toc, re.S)
+    toc = m.group(1) if m is not None else ""
+    return {"content": content, "toc": toc}
+# 解析过程和原来一样，只是将解析得到的 HTML 内容（content）和目录（toc）放在一个字典里返回
 
 
 class Category(models.Model):  # 一个标准的Python类，继承了models.Model类，有一个name属性，是models.CharField的一个实例
@@ -87,6 +107,7 @@ class Post(models.Model):
 
     # 新增views字段
     views = models.PositiveIntegerField(default=0, editable=False)
+
     # views字段的类型为PositiveIntegerField,该类型的值只允许为正整数或0，初始化views的值为0，将editable参数设为false将不允许通过django admin后台编辑此字段内容
 
     def save(self, *args, **kwargs):
@@ -178,3 +199,21 @@ class Post(models.Model):
         self.save(update_fields=['views'])
         # increase_views方法首选将自身对应的views字段的值+1(此时数据库的值还没改变)，让后调用save方法将更改后的值保存到数据库，注意update_fields参数来告诉django只更新数据库中views字段的值，以提高效率
 
+    @property
+    def toc(self):
+        return self.rich_content.get("toc", "")
+
+    @property
+    def body_html(self):
+        return self.rich_content.get("content", "")
+
+    @cached_property
+    def rich_content(self):
+        return generate_rich_content(self.body)
+    # 首先看到 rich_content 这个方法，它返回的是 generate_rich_content 函数调用后的结果，
+    # 即将 body 属性的值经 Markdown 解析后的内容。但要注意的是我们使用了 django 提供的 cached_property 装饰器，
+    # 这个装饰器和 Python 内置的 property 装饰器功能一样，可以将方法转为属性，这样就能够以属性访问的方式获取方法返回的值，
+    # 不过 cached_property 进一步提供缓存功能，它将被装饰方法调用返回的值缓存起来，下次访问时将直接读取缓存内容，而不需重复执行方法获取返回结果。
+    # 例如对博客文章内容的 Markdown 解析是比较耗时的，而解析的结果可能被多次访问，因此将其缓存起来能起到优化作用。
+    # 为了更方便地获取文章的 HTML 格式的内容和目录，我们进一步将 generate_rich_content 返回的值放到 toc 和 body_html 两个属性中，
+    # 这里两个属性都从 rich_content 中取值，cached_property 的作用就发挥出来了

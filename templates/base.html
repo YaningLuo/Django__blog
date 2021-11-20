@@ -1,3 +1,4 @@
+{% load blog_extras %}
 {% load static %}
 {% load blog_extras %}
 <!DOCTYPE html>
@@ -28,6 +29,10 @@
     <link rel="stylesheet" href="{% static 'blog/css/custom.css' %}">
 
     <style>
+        /*搜索关键词gaoliang*/
+        span.highlighted{
+            color: red;
+        }
         .codehilite {
             padding: 0;
         }
@@ -100,21 +105,28 @@
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav navbar-right">
                             <li class="cl-effect-11"><a href="{% url 'blog:index' %}" data-hover="首页">首页</a></li>
-			    {#<li class="cl-effect-11"><a href="full-width.html" data-hover="博客">博客</a></li>#}
-			    {#<li class="cl-effect-11"><a href="about.html" data-hover="关于">关于</a></li>#}
-			    {#<li class="cl-effect-11"><a href="contact.html" data-hover="联系">联系</a></li>#}
+{#                            <li class="cl-effect-11"><a href="full-width.html" data-hover="博客">博客</a></li>#}
+{#                            <li class="cl-effect-11"><a href="about.html" data-hover="关于">关于</a></li>#}
+{#                            <li class="cl-effect-11"><a href="contact.html" data-hover="联系">联系</a></li>#}
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </nav>
-                <!--<div id="header-search-box">
-                    <a id="search-menu" href="#"><span id="search-icon" class="ion-ios-search-strong"></span></a>
-                    <div id="search-form" class="search-form">
-                        <form role="search" method="get" id="searchform" action="#">
-                            <input type="search" placeholder="搜索" required>
-                            <button type="submit"><span class="ion-ios-search-strong"></span></button>
-                        </form>
-                    </div>
-		</div>-->
+{#                <div id="header-search-box">#}
+{#                    <a id="search-menu" href="#"><span id="search-icon" class="ion-ios-search-strong"></span></a>#}
+{#                    <div id="search-form" class="search-form">#}
+{#                        <form role="search" method="get" id="searchform" action="{% url 'haystack_search' %}">#}
+{#                              action="{% url 'blog:search' %}">#}
+{#                            <input type="search" name="q" placeholder="搜索" required>#}
+{#                            特别注意这里 <input type="search" name="q" placeholder="搜索" required> 中的 name 属性，#}
+{#                            当用户在这个 input 中输入搜索内容并提交表单后，键入的数据会以键值对的形式提交服务器，#}
+{#                            这个键的名字就是通过 name 属性指定的。这样服务器就可以根据 name 的值来取得用户输入的内容#}
+{#                            用户输入了搜索关键词并点击了搜索按钮后，数据就被发送给了 Django 后台服务器。#}
+{#                            表单的 action 属性的值为 {% url 'blog:search' %}（虽然我们还没有写这个视图函数），#}
+{#                            表明用户提交的结果将被发送给 blog 应用下 search 视图函数对应的 URL。#}
+{#                            <button type="submit"><span class="ion-ios-search-strong"></span></button>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                </div>#}
             </div><!-- col-md-8 -->
         </div>
     </header>
@@ -148,6 +160,10 @@
                 {% show_archives %}
                 {% show_categories %}
                 {% show_tags %}
+
+                <div class="rss">
+                    <a href="{% url 'rss' %}"><span class="ion-social-rss-outline"></span> RSS 订阅</a>
+                </div>
             </aside>
             {#            <!--#}
             {#            这里 block 也是一个模板标签，其作用是占位。#}
@@ -166,7 +182,7 @@
         <div class="row">
             <div class="col-md-12">
                 <p class="copyright">
-                    <p style="text-align: center">&copy 2021-2022</p>
+                <p style="text-align: center">&copy 2021-2022</p>
                 <p style="text-align: center">
                     <a href="https://beian.miit.gov.cn" title="#" target="_blank">豫ICP备2021031354号-1</a>
                 </p>
@@ -182,8 +198,8 @@
     <nav>
         <ul>
             <li><a href="index.html">首页</a></li>
-            <li><a href="full-width.html">博客</a></li>
-            <li><a href="about.html">关于</a></li>
+{#            <li><a href="full-width.html">博客</a></li>#}
+{#            <li><a href="about.html">关于</a></li>#}
             <li><a href="contact.html">联系</a></li>
         </ul>
     </nav>
