@@ -1,0 +1,195 @@
+{% load static %}
+{% load blog_extras %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>一堆丸崽在摸鱼</title>
+
+    <!-- meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- css -->
+    {#    <!--#}
+    {#    我们引入的路径放在一个奇怪的符号里面，用{ %% }包裹起来的叫做模板标签，我们前面说过用{ {} }包裹起来的叫做模板变量，#}
+    {#    其作用就是在最终选人的模板里显示由视图函数传过来的变量值，这里我们使用的模板标签的功能则类似于函数，#}
+    {#    例如这里的 static 模板标签，它把跟在后面的字符串 'css/bootstrap.min.css' 转换成正确的文件引入路径#}
+    {#    这样 css 和 js 文件才能被正确加载，样式才能正常显示#}
+    {#    为了能在模板中使用 { % static % } 模板标签，别忘了在最顶部 { % load static % }#}
+    {#    static 模板标签位于 static模块中，只有通过 load 模板标签将该模块引入后，才能在模板中使用 { % static % } 标签#}
+    {#    -->#}
+
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!--这里使用的是一个外部文件，不是我们本地的文件，所以无法使用模板标签-->
+    <link href="https://cdn.bootcss.com/highlight.js/9.15.8/styles/github.min.css" rel="stylesheet">
+    {#    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">#}
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'blog/css/pace.css' %}">
+    <link rel="stylesheet" href="{% static 'blog/css/custom.css' %}">
+
+    <style>
+        .codehilite {
+            padding: 0;
+        }
+
+        .hjs-ln-numbers {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+
+            text-align: center;
+            color: #ccc;
+            border-right: 1px solid #ccc;
+            vertical-align: top;
+            padding-right: 5px;
+        }
+
+        .hljs-ln-n {
+            width: 30px;
+        }
+
+        .hljs-ln .hljs-ln-code {
+            padding-left: 10px;
+            white-space: pre;
+        }
+    </style>
+
+    {#    <!--#}
+    {#    可以看到 { % static % } 标签的作用实际就是把后面的字符串加了一个 /static/ 前缀，比如 { % static 'blog/css/pace.css' % }#}
+    {#    最终渲染的值是 /static/blog/css/pace.css#}
+    {#    而 /static/ 前缀是我们在 settings.py 文件中通过 STATIC_URL = '/static/' 指定的#}
+    {#    我们用{ % static % }是因为当前url的前缀是static，如果我们/static/改成/resource/#}
+    {#        如果你没有引入模板标签，那么你要改n个地方，如果你用了，你只需要在setting.py中的STATIC_URL = '/static/' 变成 '/resource/'即可#}
+    {#    -->#}
+
+    <!-- js -->
+    {#    <script src="{% static 'blog/js/jqery-2.1.3.min.js' %}"></script>#}
+    {#    <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>#}
+    <script src="https://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="{% static 'blog/js/pace.min.js' %}"></script>
+    <script src="{% static 'blog/js/modernizr.custom.js' %}"></script>
+    <script src="https://cdn.bootcss.com/highlight.js/9.15.8/highlight.min.js"></script>
+    <script src="https://cdn.bootcss.com/highlightjs-line-numbers.js/2.7.0/highlightjs-line-numbers.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+        hljs.initLineNumbersOnLoad();
+    </script>
+</head>
+
+<body>
+<div class="container">
+    <header id="site-header">
+        <div class="row">
+            <div class="col-md-4 col-sm-5 col-xs-8">
+                <div class="logo">
+                    <h1><a href="{% url 'blog:index' %}"><a>沐兮的个人小窝</a></a></h1>
+                </div>
+            </div><!-- col-md-4 -->
+            <div class="col-md-8 col-sm-7 col-xs-4">
+                <nav class="main-nav" role="navigation">
+                    <div class="navbar-header">
+                        <button type="button" id="trigger-overlay" class="navbar-toggle">
+                            <span class="ion-navicon"></span>
+                        </button>
+                    </div>
+
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="cl-effect-11"><a href="{% url 'blog:index' %}" data-hover="首页">首页</a></li>
+                            <li class="cl-effect-11"><a href="full-width.html" data-hover="博客">博客</a></li>
+                            <li class="cl-effect-11"><a href="about.html" data-hover="关于">关于</a></li>
+                            <li class="cl-effect-11"><a href="contact.html" data-hover="联系">联系</a></li>
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </nav>
+                <div id="header-search-box">
+                    <a id="search-menu" href="#"><span id="search-icon" class="ion-ios-search-strong"></span></a>
+                    <div id="search-form" class="search-form">
+                        <form role="search" method="get" id="searchform" action="#">
+                            <input type="search" placeholder="搜索" required>
+                            <button type="submit"><span class="ion-ios-search-strong"></span></button>
+                        </form>
+                    </div>
+                </div>
+            </div><!-- col-md-8 -->
+        </div>
+    </header>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+        {#        这里 django 会通过全局上下文自动把 messages 变量传给模板，这个变量里存储我们发送的消息内容，然后就是循环显示消息了。#}
+        {#        这里我们使用了 bootstrap 的一个 alert 组件，为其设置不同的 class 会显示不同的颜色，所以之前添加消息时传入的 extra_tags 就派上了用场。#}
+        {#        比如这里 alert-{ { message.tags } }，当传入的是 success 时，类名就为 alert-success，这时显示的消息背景颜色就是绿色，传入的是 dangerous，则显示的就是红色#}
+    {% endif %}
+</div>
+
+<div class="content-body">
+    <div class="container">
+        <div class="row">
+            <main class="col-md-8">
+                {% block main %}
+                {% endblock main %}
+            </main>
+            <aside class="col-md-4">
+                {% block toc %}
+                {% endblock toc %}
+
+                {% show_recent_posts %}
+                {% show_archives %}
+                {% show_categories %}
+                {% show_tags %}
+            </aside>
+            {#            <!--#}
+            {#            这里 block 也是一个模板标签，其作用是占位。#}
+            {#            比如这里的 { % block main % }{ % endblock main % } 是一个占位框，#}
+            {#            main 是我们给这个 block 取的名字。下面我们会看到 block 标签的作用。#}
+            {#            同时我们也在 aside 标签下加了一个 { % block toc % }{ % endblock toc % } 占位框，#}
+            {#            因为 detail.html 中 aside 标签下会多一个目录栏。#}
+            {#            当 { % block toc % }{ % endblock toc % } 中没有任何内容时，{ % block toc % }{ % endblock toc % } 在模板中不会显示。#}
+            {#            但当其中有内容是，模板就会显示 block 中的内容#}
+            {#            -->#}
+        </div>
+    </div>
+</div>
+<footer id="site-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="copyright">
+                    <p style="text-align: center">&copy 2021-2022</p>
+                <p style="text-align: center">
+                    <a href="https://beian.miit.gov.cn" title="#" target="_blank">豫ICP备2021031354号-1</a>
+                </p>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Mobile Menu -->
+<div class="overlay overlay-hugeinc">
+    <button type="button" class="overlay-close"><span class="ion-ios-close-empty"></span></button>
+    <nav>
+        <ul>
+            <li><a href="index.html">首页</a></li>
+            <li><a href="full-width.html">博客</a></li>
+            <li><a href="about.html">关于</a></li>
+            <li><a href="contact.html">联系</a></li>
+        </ul>
+    </nav>
+</div>
+
+<script src="{% static 'blog/js/script.js' %}j"></script>
+
+</body>
+</html>

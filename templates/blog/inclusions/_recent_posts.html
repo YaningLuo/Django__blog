@@ -1,0 +1,13 @@
+<div class="widget widget-recent-posts">
+    <h3 class="widget-title">最新文章</h3>
+    <ul>
+        {% for post in recent_post_list %}
+        <li>
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+        </li>
+        {% empty %}
+        暂无文章
+        {% endfor %}
+{#    <!--很简单，循环由 show_recent_posts 传递的模板变量 recent_post_list 即可，和 index.html 中循环显示文章列表是一样的-->#}
+    </ul>
+</div>

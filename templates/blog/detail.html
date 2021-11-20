@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load comments_extras %}
+{#<!DOCTYPE html>#}
+{#<html>#}
+{#<head>#}
+{#    <title>Black &amp; White</title>#}
+{##}
+{#    <!-- meta -->#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1">#}
+{##}
+{#    <!-- css -->#}
+{#    <link rel="stylesheet" href="css/bootstrap.min.css">#}
+{#    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">#}
+{#    <link rel="stylesheet" href="css/pace.css">#}
+{#    <link rel="stylesheet" href="css/custom.css">#}
+{##}
+{#    <!-- js -->#}
+{#    <script src="js/jquery-2.1.3.min.js"></script>#}
+{#    <script src="js/bootstrap.min.js"></script>#}
+{#    <script src="js/pace.min.js"></script>#}
+{#    <script src="js/modernizr.custom.js"></script>#}
+{#</head>#}
+{##}
+{#<body id="single">#}
+{#<div class="container">#}
+{#    <header id="site-header">#}
+{#        <div class="row">#}
+{#            <div class="col-md-4 col-sm-5 col-xs-8">#}
+{#                <div class="logo">#}
+{#                    <h1><a href="index.html"><b>Black</b> &amp; White</a></h1>#}
+{#                </div>#}
+{#            </div><!-- col-md-4 -->#}
+{#            <div class="col-md-8 col-sm-7 col-xs-4">#}
+{#                <nav class="main-nav" role="navigation">#}
+{#                    <div class="navbar-header">#}
+{#                        <button type="button" id="trigger-overlay" class="navbar-toggle">#}
+{#                            <span class="ion-navicon"></span>#}
+{#                        </button>#}
+{#                    </div>#}
+{##}
+{#                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">#}
+{#                        <ul class="nav navbar-nav navbar-right">#}
+{#                            <li class="cl-effect-11"><a href="index.html" data-hover="首页">首页</a></li>#}
+{#                            <li class="cl-effect-11"><a href="full-width.html" data-hover="博客">博客</a></li>#}
+{#                            <li class="cl-effect-11"><a href="about.html" data-hover="关于">关于</a></li>#}
+{#                            <li class="cl-effect-11"><a href="contact.html" data-hover="联系">联系</a></li>#}
+{#                        </ul>#}
+{#                    </div><!-- /.navbar-collapse -->#}
+{#                </nav>#}
+{#                <div id="header-search-box">#}
+{#                    <a id="search-menu" href="#"><span id="search-icon" class="ion-ios-search-strong"></span></a>#}
+{#                    <div id="search-form" class="search-form">#}
+{#                        <form role="search" method="get" id="searchform" action="#">#}
+{#                            <input type="search" placeholder="搜索" required>#}
+{#                            <button type="submit"><span class="ion-ios-search-strong"></span></button>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div><!-- col-md-8 -->#}
+{#        </div>#}
+{#    </header>#}
+{#</div>#}
+{##}
+{#<div class="content-body">#}
+{#    <div class="container">#}
+{#        <div class="row">#}
+{#            <main class="col-md-8">#}
+{% block main %}
+    <article class="post post--{{ post.pk }}">
+        <header class="entry-header">
+            <h1 class="entry-title">{{ post.title }}</h1>
+            <div class="entry-meta">
+                <span class="post-category"><a href="#">{{ post.category.name }}</a></span>
+                <span class="post-date">
+                                <a href="#">
+                                    <time class="entry-date"
+                                          datetime="{{ post.created_time }}">{{ post.created_time }}
+                                    </time>
+                                </a>
+                            </span>
+                <span class="post-author"><a href="#">{{ post.author }}</a></span>
+                <span class="comments-link">
+                                    <a href="#comment-area">{{ post.comment_set.count }}评论</a></span>
+                <span class="views-count">
+                                    <a href="{{ post.get_absolute_url }}">{{ post.views }}阅读</a></span>
+            </div>
+        </header>
+        <div class="entry-content clearfix">
+            {{ post.body|safe }}
+            {#                            <!--#}
+            {#                            django 出于安全方面的考虑，任何的 HTML 代码在 django 的模板中都会被转义（即显示原始的 HTML 代码，而不是经浏览器渲染后的格式）。#}
+            {#                            为了解除转义，只需在模板变量后使用 safe 过滤器即可#}
+            {#                            safe 是 django 模板系统中的过滤器（Filter），可以简单地把它看成是一种函数，其作用是作用于模板变量，将模板变量的值变为经过滤器处理过后的值。#}
+            {#                            例如这里 { { post.body|safe } }，本来 { { post.body } }经模板系统渲染后应该显示 body 本身的值，#}
+            {#                            但是在后面加上 safe 过滤器后，渲染的值不再是 body 本身的值，而是由 safe 函数处理后返回的值。#}
+            {#                            过滤器的用法是在模板变量后加一个 | 管道符号，再加上过滤器的名称。可以连续使用多个过滤器，例如 { { var|filter1|filter2 } }#}
+            {#                            -->#}
+        </div>
+    </article>
+    <section class="comment-area" id="comment-area">
+        <hr>
+        <h3>发表评论</h3>
+        {% show_comment_form post %}
+
+        <div class="comment-list-panel">
+            {% show_comments post %}
+        </div>
+    </section>
+{% endblock main %}
+</main>
+<aside class="col-md-4">
+    {% block toc %}
+        {% if post.toc %}
+            <div class="widget widget-content">
+                <h3 class="widget-title">文章目录</h3>
+                <div class="toc">
+                    <ul>
+                        {{ post.toc|safe }}
+                    </ul>
+                </div>
+                {#                            <!--#}
+                {#                            即使用模板变量标签 { { post.toc  }} 显示模板变量的值，#}
+                {#                            注意 post.toc 实际是一段 HTML 代码，我们知道 django 会对模板中的 HTML 代码进行转义，#}
+                {#                            所以要使用 safe 标签防止 django 对其转义#}
+                {#                            现在目录已经可以完美生成了，不过还有一个异常情况，当文章没有任何标题元素时，Markdown 就提取不出目录结构，post.toc 就是一个空的 div 标签#}
+                {#                            我们希望只在有文章存在目录结构是才显示侧边栏的目录，分析 toc 的内容，如果有目录结构，ul 标签中就有值，否则就没有值。#}
+                {#                            我们可以使用正则表达式来测试 ul 标签中是否包裹有元素来确定是否存在目录#}
+                {#                            -->#}
+            </div>
+        {% endif %}
+    {% endblock toc %}
+{#    <div class="widget widget-recent-posts">#}
+{#        <h3 class="widget-title">最新文章</h3>#}
+{#        <ul>#}
+{#            <li>#}
+{#                <a href="#">Django 博客开发入门教程：前言</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">Django 博客使用 Markdown 自动生成文章目录</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">部署 Django 博客</a>#}
+{#            </li>#}
+{#        </ul>#}
+{#    </div>#}
+{#    <div class="widget widget-archives">#}
+{#        <h3 class="widget-title">归档</h3>#}
+{#        <ul>#}
+{#            <li>#}
+{#                <a href="#">2017 年 5 月</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">2017 年 4 月</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">2017 年 3 月</a>#}
+{#            </li>#}
+{#        </ul>#}
+{#    </div>#}
+{##}
+{#    <div class="widget widget-category">#}
+{#        <h3 class="widget-title">分类</h3>#}
+{#        <ul>#}
+{#            <li>#}
+{#                <a href="#">Django 博客教程 <span class="post-count">(13)</span></a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">Python 教程 <span class="post-count">(11)</span></a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">Django 用户认证 <span class="post-count">(8)</span></a>#}
+{#            </li>#}
+{#        </ul>#}
+{#    </div>#}
+{##}
+{#    <div class="widget widget-tag-cloud">#}
+{#        <h3 class="widget-title">标签云</h3>#}
+{#        <ul>#}
+{#            <li>#}
+{#                <a href="#">Django</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">Python</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">Java</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">笔记</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">文档</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">AngularJS</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">CSS</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">JavaScript</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">Snippet</a>#}
+{#            </li>#}
+{#            <li>#}
+{#                <a href="#">jQuery</a>#}
+{#            </li>#}
+{#        </ul>#}
+{#    </div>#}
+{#    <div class="rss">#}
+{#        <a href=""><span class="ion-social-rss-outline"></span> RSS 订阅</a>#}
+{#    </div>#}
+{#</aside>#}
+{#</div>#}
+{#</div>#}
+{#</div>#}
+{##}
+{##}
+{#<!-- Mobile Menu -->#}
+{#<div class="overlay overlay-hugeinc">#}
+{#    <button type="button" class="overlay-close"><span class="ion-ios-close-empty"></span></button>#}
+{#    <nav>#}
+{#        <ul>#}
+{#            <li><a href="index.html">首页</a></li>#}
+{#            <li><a href="full-width.html">博客</a></li>#}
+{#            <li><a href="about.html">关于</a></li>#}
+{#            <li><a href="contact.html">联系</a></li>#}
+{#        </ul>#}
+{#    </nav>#}
+{#</div>#}
+{##}
+{#<script src="js/script.js"></script>#}
+{##}
+{#</body>#}
+{#</html>#}

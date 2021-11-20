@@ -1,0 +1,48 @@
+<form action="{% url 'comments:comment' post.pk %}" method="post" class="comment-form">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-4">
+            <label for="{{ form.name.id_for_label }}">{{ form.name.label }}:</label>
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+        <div class="col-md-4">
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}:</label>
+            {{ form.email }}
+            {{ form.email.errors }}
+        </div>
+        <div class="col-md-4">
+            <label for="{{ form.url.id_for_label }}">{{ form.url.label }}:</label>
+            {{ form.url }}
+            {{ form.url.errors }}
+        </div>
+        <div class="col-md-12">
+            <label for="{{ form.text.id_for_label }}">{{ form.text.label }}:</label>
+            {{ form.text }}
+            {{ form.text.errors }}
+            <button type="submit" class="comment-btn">发表</button>
+        </div>
+    </div>
+</form>
+{#首先 HTML 的 form 标签有 2 个重要的属性，action 和 method。action 指定表单内容提交的地址，#}
+{#这里我们提交给 comments:comment 视图函数对应的 URL（后面会创建这个视图函数并绑定对应的 URL），#}
+{#模板标签 url 的用法在 分类、归档和标签页 教程中有详细介绍。method 指定提交表单时的 HTTP 请求类型，一般表单提交都是使用 POST#}
+{#然后我们看到 { % csrf_token % }，这个模板标签在表单渲染时会自动渲染为一个隐藏类型的 HTML input 控件，#}
+{#其值为一个随机字符串，作用主要是为了防护 CSRF（跨站请求伪造）攻击。{ % csrf_token % } 在模板中渲染出来的内容大概如下所示#}
+{#< input type="hidden" name="csrfmiddlewaretoken" value="KH9QLnpQPv2IBcv3oLsksJXdcGvKSnC8t0mTfRSeNIlk5T1G1MBEIwVhK4eh6gIZ" >#}
+{#CSRF 攻击是一种常见的 Web 攻击手段。攻击者利用用户存储在浏览器中的 cookie，向目标网站发送 HTTP 请求，#}
+{#这样在目标网站看来，请求来自于用户，而实际发送请求的人却是攻击者。#}
+{#例如假设我们的博客支持登录功能（目前没有），并使用 cookie（或者 session）记录用户的登录状态，且评论表单没有 csrf token 防护。#}
+{#用户登录了我们的博客后，又去访问了一个小电影网站，小电影网站有一段恶意 JavaScript 脚本，它读取用户的 cookie，并构造了评论表单的数据，#}
+{#然后脚本使用这个 cookie 向我们的博客网站发送一条 POST 请求，django 就会认为这是来自该用户的评论发布请求，便会在后台创建一个该用户的评论，而这个用户全程一脸懵逼。#}
+{#CSRF 的一个防范措施是，对所有访问网站的用户颁发一个令牌（token），#}
+{#对于敏感的 HTTP 请求，后台会校验此令牌，确保令牌的确是网站颁发给指定用户的。#}
+{#因此，当用户访问别的网站时，虽然攻击者可以拿到用户的 cookie，但是无法取得证明身份的令牌，因此发过来的请求便不会被受理。#}
+{#以上是对 CSRF 攻击和防护措施的一个简单介绍，更加详细的讲解请使用搜索引擎搜索相关资料#}
+{#show_comment_form 模板标签给模板传递了一个模板变量 form，它是 CommentForm 的一个实例，表单的字段 {{ form.name }}、{{ form.email }}、{{ form.url }} 等将自动渲染成表单控件，例如 <input> 控件。#}
+{#注意到表单的定义中并没有定义 name、email、url 等属性，那它们是哪里来的呢？#}
+{#看到 CommentForm 中 Meta 下的 fields，django 会自动将 fields 中声明的模型字段设置为表单的属性。#}
+{#{{ form.name.errors }}、{{ form.email.errors }} 等将渲染表单对应字段的错误（如果有的话），#}
+{#例如用户 email 格式填错了，那么 django 会检查用户提交的 email 的格式，然后将格式错误信息保存到 errors 中，模板便将错误信息渲染显示。#}
+{#{{ form.xxx.label }} 用来获取表单的 label，之前说过，django 根据表单对应的模型中字段的 verbose_name 参数生成。#}
+{#然后我们就可以在 detail.html 中使用这个模板标签来渲染表单了，注意在使用前记得先 {% load comments_extras %} 这个模块#}

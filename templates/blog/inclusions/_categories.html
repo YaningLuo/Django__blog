@@ -1,0 +1,18 @@
+<div class="widget widget-category">
+    <h3 class="widget-title">分类</h3>
+    <ul>
+        {% for category in category_list %}
+            <li>
+                <a href="{% url 'blog:category' category.pk %}">{{ category.name }}
+                    <span class="post-count">
+{#                        (13)#}
+{#                        <!-- 显示的是该分类下的文章数目，这个特性会在接下来会讲解如何实现，目前暂时用占位数据代替吧-->#}
+                        ({{ category.num_posts }})
+                    </span>
+                </a>
+            </li>
+        {% empty %}
+            暂无分类
+        {% endfor %}
+    </ul>
+</div>

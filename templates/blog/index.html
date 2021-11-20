@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+{#<!DOCTYPE html>#}
+{#<html>#}
+{#<head>#}
+{#    <title>Black &amp; White</title>#}
+{##}
+{#    <!-- meta -->#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1">#}
+{##}
+{#    <!-- css -->#}
+{#    <!--#}
+{#    我们引入的路径放在一个奇怪的符号里面，用{ %% }包裹起来的叫做模板标签，我们前面说过用{ {} }包裹起来的叫做模板变量，#}
+{#    其作用就是在最终选人的模板里显示由视图函数传过来的变量值，这里我们使用的模板标签的功能则类似于函数，#}
+{#    例如这里的 static 模板标签，它把跟在后面的字符串 'css/bootstrap.min.css' 转换成正确的文件引入路径#}
+{#    这样 css 和 js 文件才能被正确加载，样式才能正常显示#}
+{#    为了能在模板中使用 { % static % } 模板标签，别忘了在最顶部 { % load static % }#}
+{#    static 模板标签位于 static模块中，只有通过 load 模板标签将该模块引入后，才能在模板中使用 { % static % } 标签#}
+{#    -->#}
+{##}
+{#    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">#}
+{#    <!--这里使用的是一个外部文件，不是我们本地的文件，所以无法使用模板标签-->#}
+{#    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">#}
+{#    <link rel="stylesheet" href="{% static 'blog/css/pace.css' %}">#}
+{#    <link rel="stylesheet" href="{% static 'blog/css/custom.css' %}">#}
+{##}
+{#    <!--#}
+{#    可以看到 { % static % } 标签的作用实际就是把后面的字符串加了一个 /static/ 前缀，比如 { % static 'blog/css/pace.css' % }#}
+{#    最终渲染的值是 /static/blog/css/pace.css#}
+{#    而 /static/ 前缀是我们在 settings.py 文件中通过 STATIC_URL = '/static/' 指定的#}
+{#    我们用{ % static % }是因为当前url的前缀是static，如果我们/static/改成/resource/#}
+{#        如果你没有引入模板标签，那么你要改n个地方，如果你用了，你只需要在setting.py中的STATIC_URL = '/static/' 变成 '/resource/'即可#}
+{#    -->#}
+{##}
+{#    <!-- js -->#}
+{#    <script src="{% static 'blog/js/jqery-2.1.3.min.js' %}"></script>#}
+{#    <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>#}
+{#    <script src="{% static 'blog/js/pace.min.js' %}"></script>#}
+{#    <script src="{% static 'blog/js/modernizr.custom.js' %}"></script>#}
+{#</head>#}
+{##}
+{#<body>#}
+{#<div class="container">#}
+{#    <header id="site-header">#}
+{#        <div class="row">#}
+{#            <div class="col-md-4 col-sm-5 col-xs-8">#}
+{#                <div class="logo">#}
+{#                    <h1><a href="index.html"><b>Black</b> &amp; White</a></h1>#}
+{#                </div>#}
+{#            </div><!-- col-md-4 -->#}
+{#            <div class="col-md-8 col-sm-7 col-xs-4">#}
+{#                <nav class="main-nav" role="navigation">#}
+{#                    <div class="navbar-header">#}
+{#                        <button type="button" id="trigger-overlay" class="navbar-toggle">#}
+{#                            <span class="ion-navicon"></span>#}
+{#                        </button>#}
+{#                    </div>#}
+{##}
+{#                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">#}
+{#                        <ul class="nav navbar-nav navbar-right">#}
+{#                            <li class="cl-effect-11"><a href="index.html" data-hover="首页">首页</a></li>#}
+{#                            <li class="cl-effect-11"><a href="full-width.html" data-hover="博客">博客</a></li>#}
+{#                            <li class="cl-effect-11"><a href="about.html" data-hover="关于">关于</a></li>#}
+{#                            <li class="cl-effect-11"><a href="contact.html" data-hover="联系">联系</a></li>#}
+{#                        </ul>#}
+{#                    </div><!-- /.navbar-collapse -->#}
+{#                </nav>#}
+{#                <div id="header-search-box">#}
+{#                    <a id="search-menu" href="#"><span id="search-icon" class="ion-ios-search-strong"></span></a>#}
+{#                    <div id="search-form" class="search-form">#}
+{#                        <form role="search" method="get" id="searchform" action="#">#}
+{#                            <input type="search" placeholder="搜索" required>#}
+{#                            <button type="submit"><span class="ion-ios-search-strong"></span></button>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div><!-- col-md-8 -->#}
+{#        </div>#}
+{#    </header>#}
+{#</div>#}
+{#<div class="copyrights">Collect from <a href="http://www.cssmoban.com/">网页模板</a></div>#}
+{#<div class="copyrights">Modified by <a href="http://zmrenwu.com/">追梦人物的博客</a></div>#}
+{##}
+{#<div class="content-body">#}
+{#    <div class="container">#}
+{#        <div class="row">#}
+{#            <main class="col-md-8">#}
+{% block main %}
+    {% for post in post_list %}
+        <article class="post post-{{ post.pk }}">
+            <header class="entry-header">
+                <h1 class="entry-title">
+                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                    <!--
+                    我们把 a 标签的 href 属性的值改成了 { { post.get_absolute_url } }。回顾一下模板变量的用法，
+                    由于 get_absolute_url 这个方法（我们定义在 Post 类中的）返回的是 post 对应的 URL，
+                    因此这里 { { post.get_absolute_url } } 最终会被替换成该 post 自身的 URL
+                    -->
+                </h1>
+                <div class="entry-meta">
+                    <span class="post-category"><a href="#">{{ post.category.name }}</a></span>
+                    <span class="post-date">
+                                <a href="#">
+                                <time class="entry-date"
+                                      datetime="{{ post.created_time }}">{{ post.created_time }}</time>
+                                </a>
+                            </span>
+                    <span class="post-author"><a href="#">{{ post.author }}</a></span>
+                    <span class="comments-link">
+                                        <a href="{{ post.get_absolute_url }}#comment-area">{{ post.comment_set.count }}评论</a></span>
+                    <span class="views-count">
+                                        <a href="{{ post.get_absolute_url }}">{{ post.views }}阅读</a></span>
+                </div>
+            </header>
+            <div class="entry-content clearfix">
+                <p>{{ post.excerpt }}</p>
+                <div class="read-more cl-effect-14">
+                    <a href="{{ post.get_absolute_url }}" class="more-link">继续阅读 <span class="meta-nav">→</span></a>
+                </div>
+            </div>
+        </article>
+    {% empty %}
+        <div class="no-post">暂时没有文章</div>
+    {% endfor %}
+    {#                <!--#}
+    {#                语法和 Python 的 for 循环类似，只是被 { % % } 这样一个模板标签符号包裹着。#}
+    {#                { % empty % } 的作用是当 post_list 为空，即数据库里没有文章时显示 { % empty % } 下面的内容，#}
+    {#                最后我们用 { % endfor % } 告诉 django 循环在这里结束了#}
+    {##}
+    {#                post_list 是一个 QuerySet（类似于一个列表的数据结构），#}
+    {#                其中每一项都是之前定义在 blog\models.py 中的 Post 类的实例，且每个实例分别对应着数据库中每篇文章的记录。#}
+    {#                因此我们循环遍历 post_list ，每一次遍历的结果都保存在 post 变量里。#}
+    {#                所以我们使用模板变量来显示 post 的属性值。例如这里的 { { post.pk } }（pk 是 primary key 的缩写，#}
+    {#                即 post 对应于数据库中记录的 id 值，该属性尽管我们没有显示定义，但是 django 会自动为我们添加）#}
+    {#                -->#}
+    {#                <!-- 简单分页效果#}
+    {#                <div class="pagination-simple">#}
+    {#                    <a href="#">上一页</a>#}
+    {#                    <span class="current">第 6 页 / 共 11 页</span>#}
+    {#                    <a href="#">下一页</a>#}
+    {#                </div>#}
+    {#                -->#}
+    {#    paginator ，即 Paginator 的实例。#}
+    {#    page_obj ，当前请求页面分页对象。#}
+    {#    is_paginated，是否已分页。只有当分页后页面超过两页时才算已分页。#}
+    {#    object_list，请求页面的对象列表，和 post_list 等价。#}
+    {#    所以在模板中循环文章列表时可以选 post_list ，也可以选 object_list#}
+
+    {% if is_paginated %}
+        <div class="pagination-simple">
+            <!-- 如果当前页还有上一页，显示一个上一页的按钮 -->
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
+            {% endif %}
+            <!-- 显示当前页面信息 -->
+            <span class="current">第 {{ page_obj.number }} 页 / 共 {{ paginator.num_pages }} 页</span>
+            <!-- 如果当前页还有下一页，显示一个下一页的按钮 -->
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">下一页</a>
+            {% endif %}
+        </div>
+{#                {{ page_obj.render }}#}
+{#                {{ page_obj.render }}#}
+    {% endif %}
+{% endblock main %}
+
+{#            <!--#}
+{#             base.html 里的代码加上 { % block main % }{ % endblock main % } 里的代码就和最开始 index.html 里的代码一样了。#}
+{#             这就是模板继承的作用，公共部分的代码放在 base.html 里，#}
+{#             而其它页面不同的部分通过替换 { % block main % }{ % endblock main % } 占位标签里的内容即可#}
+{#             如果你对这种模板继承还是有点糊涂，可以把这种继承和 Python 中类的继承类比。base.html 就是父类，index.html 就是子类。#}
+{#             index.html 继承了 base.html 中的全部内容，同时它自身还有一些内容，#}
+{#             这些内容就通过 “覆写” { % block main % }{ % endblock main % }（把 block 看做是父类的属性）的内容添加即可#}
+{##}
+{#             detail 同样继承 base.html ，#}
+{#             在 { % block main % }{ % endblock main % } 里填充 detail.html 页面应该显示的内容，#}
+{#             以及在 { % block toc % }{ % endblock toc % } 中填写 base.html 中没有的目录部分的内容。#}
+{#             不过目前的目录只是占位数据，我们在以后会实现如何从文章中自动摘取目录#}
+{#            -->#}
+{##}
+{##}
+{##}
+{#<!-- Mobile Menu -->#}
+{#<div class="overlay overlay-hugeinc">#}
+{#    <button type="button" class="overlay-close"><span class="ion-ios-close-empty"></span></button>#}
+{#    <nav>#}
+{#        <ul>#}
+{#            <li><a href="index.html">首页</a></li>#}
+{#            <li><a href="full-width.html">博客</a></li>#}
+{#            <li><a href="about.html">关于</a></li>#}
+{#            <li><a href="contact.html">联系</a></li>#}
+{#        </ul>#}
+{#    </nav>#}
+{#</div>#}
+{##}
+{#<script src="{% static 'blog/js/script.js' %}j"></script>#}
+{##}
+{#</body>#}
+{#</html>#}

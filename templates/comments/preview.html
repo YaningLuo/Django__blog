@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load comments_extras %}
+
+{% block main %}
+    {% show_comment_form post form %}
+{% endblock main %}
+{#这里还是使用 show_comment_form 模板标签来展示一个表单，#}
+{#然而不同的是，这里我们传入由视图函数 comment 传来的绑定了用户提交的数据的表单实例 form，#}
+{#而不是渲染一个空表单。因为视图函数 comment 中的表单实例是绑定了用户提交的评论数据，以及对数据进行过合法性校验的表单，#}
+{#因此当 django 渲染这个表单时，会连带渲染用户已经填写的表单数据以及数据不合法的错误提示信息，而不是一个空的表单了。#}
+{#例如，我们提交的数据中 email 格式不合法，表单校验了数据格式#}
