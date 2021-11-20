@@ -65,6 +65,7 @@ urlpatterns = [
     # path('categories/<int:pk>/', views.category, name='category'),
     path('categories/<int:pk>', views.CategoryView.as_view(), name='category'),
     path('tage/<int:pk>/', views.tag, name='tag'),
+    path('search/', views.search, name='search'),
 ]
 
 # 这个两行的函数体现了这个过程。它首先接受了一个名为 request 的参数，

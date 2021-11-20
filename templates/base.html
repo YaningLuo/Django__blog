@@ -101,32 +101,33 @@
                             <span class="ion-navicon"></span>
                         </button>
                     </div>
-
+{##}
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="cl-effect-11"><a href="{% url 'blog:index' %}" data-hover="首页">首页</a></li>
+{#                        <ul class="nav navbar-nav navbar-right">#}
+{#                            <li class="cl-effect-11"><a href="{% url 'blog:index' %}" data-hover="首页">首页</a></li>#}
 {#                            <li class="cl-effect-11"><a href="full-width.html" data-hover="博客">博客</a></li>#}
 {#                            <li class="cl-effect-11"><a href="about.html" data-hover="关于">关于</a></li>#}
 {#                            <li class="cl-effect-11"><a href="contact.html" data-hover="联系">联系</a></li>#}
-                        </ul>
+{#                        </ul>#}
                     </div><!-- /.navbar-collapse -->
                 </nav>
-{#                <div id="header-search-box">#}
+                <div id="header-search-box" style="width: 200px;height: 50px">
 {#                    <a id="search-menu" href="#"><span id="search-icon" class="ion-ios-search-strong"></span></a>#}
 {#                    <div id="search-form" class="search-form">#}
-{#                        <form role="search" method="get" id="searchform" action="{% url 'haystack_search' %}">#}
-{#                              action="{% url 'blog:search' %}">#}
-{#                            <input type="search" name="q" placeholder="搜索" required>#}
+                        <form role="search" method="get" id="searchform"
+{#                              action="{% url 'haystack_search' %}">#}
+                              action="{% url 'blog:search' %}">
+                            <input type="search" name="q" placeholder="搜索" required>
 {#                            特别注意这里 <input type="search" name="q" placeholder="搜索" required> 中的 name 属性，#}
 {#                            当用户在这个 input 中输入搜索内容并提交表单后，键入的数据会以键值对的形式提交服务器，#}
 {#                            这个键的名字就是通过 name 属性指定的。这样服务器就可以根据 name 的值来取得用户输入的内容#}
 {#                            用户输入了搜索关键词并点击了搜索按钮后，数据就被发送给了 Django 后台服务器。#}
 {#                            表单的 action 属性的值为 {% url 'blog:search' %}（虽然我们还没有写这个视图函数），#}
 {#                            表明用户提交的结果将被发送给 blog 应用下 search 视图函数对应的 URL。#}
-{#                            <button type="submit"><span class="ion-ios-search-strong"></span></button>#}
-{#                        </form>#}
+                            <button type="submit"><span class="ion-ios-search-strong"></span></button>
+                        </form>
 {#                    </div>#}
-{#                </div>#}
+                </div>
             </div><!-- col-md-8 -->
         </div>
     </header>

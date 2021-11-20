@@ -10,6 +10,10 @@ from markdown.extensions.toc import TocExtension
 from .models import Post, Category, Tag
 from django.views.generic import ListView, DetailView
 from pure_pagination.mixins import PaginationMixin
+from django.contrib import messages
+from django.db.models import Q
+from django.shortcuts import redirect
+
 
 # Create your views here.
 # 这里我们不再是直接把字符串传给 HttpResponse 了，而是调用 django 提供的 render 函数。
@@ -209,3 +213,15 @@ class PostDetailView(DetailView):
     # 你也许会被这么多方法搞乱，为了便于理解，你可以简单地把 get 方法看成是 detail 视图函数，至于其它的像 get_object、get_context_data 都是辅助方法，
     # 这些方法最终在 get 方法中被调用，这里你没有看到被调用的原因是它们隐含在了 super(PostDetailView, self).get(request, *args, **kwargs) 即父类 get 方法的调用中。
     # 最终传递给浏览器的 HTTP 响应就是 get 方法返回的 HttpResponse 对象。
+
+
+def search(request):
+    q = request.GET.get('q')
+
+    if not q:
+        error_msg = "请输入搜索关键词"
+        messages.add_message(request, messages.ERROR, error_msg, extra_tags='danger')
+        return redirect('blog:index')
+
+    post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q))
+    return render(request, 'blog/index.html', {'post_list': post_list})
