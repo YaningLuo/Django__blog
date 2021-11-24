@@ -111,13 +111,13 @@
 {#                        </ul>#}
                     </div><!-- /.navbar-collapse -->
                 </nav>
-                <div id="header-search-box" style="width: 150px;height: 50px">
+                <div id="header-search-box" style="width: 170px;height: 50px">
 {#                    <a id="search-menu" href="#"><span id="search-icon" class="ion-ios-search-strong"></span></a>#}
 {#                    <div id="search-form" class="search-form">#}
                         <form role="search" method="get" id="searchform"
 {#                              action="{% url 'haystack_search' %}">#}
                               action="{% url 'blog:search' %}">
-                            <input type="search" name="q" placeholder="搜索" required>
+                            <input type="search" name="q" placeholder="遇之所见 · 喜之所爱" required>
 {#                            特别注意这里 <input type="search" name="q" placeholder="搜索" required> 中的 name 属性，#}
 {#                            当用户在这个 input 中输入搜索内容并提交表单后，键入的数据会以键值对的形式提交服务器，#}
 {#                            这个键的名字就是通过 name 属性指定的。这样服务器就可以根据 name 的值来取得用户输入的内容#}
@@ -166,7 +166,7 @@
                     <a href="{% url 'rss' %}"><span class="ion-social-rss-outline"></span> RSS 订阅</a>
                 </div>
 		<div class="rss">
-			<p style="background-image: -webkit-linear-gradient(bottom, rgb(205,235,139), rgb(168,73,163)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">好友的博客</p>
+			<p style="background-image: -webkit-linear-gradient(bottom, rgb(205,235,139), rgb(168,73,163)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">友链</p>
 			<div clss="col-md-4" style="font-size:15px;">
 				<p><a href="https://xiaoyes.cn" title="毕计状" style="background-image: -webkit-linear-gradient(bottom, rgb(239,1,124), rgb(102,182,252)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">路远的博客</a></p>
 				<p><a href="https://www.cnblogs.com/selisen/" title="李森" style="background-image: -webkit-linear-gradient(bottom, rgb(203,96,179), rgb(255,48,25)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">开心小市民</a>
